@@ -21,17 +21,20 @@ const EventList = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   // Filtrage des événements en fonction du type sélectionné et de la page actuelle
-  const filteredEvents = ((!type ? data?.events : data?.events) || []).filter(
-    (event, index) => {
-      if (
-        (currentPage - 1) * PER_PAGE <= index &&
-        PER_PAGE * currentPage > index
-      ) {
-        return true;
-      }
-      return false;
+  const filteredEvents = (
+    (!type
+      ? data?.events
+      : // Permet de filtrer les événements en fonction de leur type
+        data?.events.filter((event) => event.type === type)) || []
+  ).filter((events, index) => {
+    if (
+      (currentPage - 1) * PER_PAGE <= index &&
+      PER_PAGE * currentPage > index
+    ) {
+      return true;
     }
-  );
+    return false;
+  });
 
   // Fonction pour changer le type d'événement, réinitialiser la page à 1
   const changeType = (evtType) => {
