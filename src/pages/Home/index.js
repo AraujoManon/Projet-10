@@ -12,8 +12,11 @@ import Modal from "../../containers/Modal"; // Import du composant Modal depuis 
 import { useData } from "../../contexts/DataContext"; // Import du hook useData depuis le contexte DataContext
 
 const Page = () => {
-  const { last } = useData(); // Extraction de la dernière prestation à partir du contexte useData()
-
+  const { data } = useData();
+  // Classification des évènements par date afin de récupérer la dernière prestation
+  const last = data?.events.sort(
+    (evtA, evtB) => new Date(evtB.date) - new Date(evtA.date)
+  )[0];
   return (
     <>
       {/* En-tête de la page */}
@@ -145,13 +148,16 @@ const Page = () => {
         <div className="col presta">
           <h3>Notre dernière prestation</h3>
           {/* Utilisation du composant EventCard pour afficher les détails de la dernière prestation */}
-          <EventCard
-            imageSrc={last?.cover} // Affichage de l'image de couverture de la dernière prestation
-            title={last?.title} // Affichage du titre de la dernière prestation
-            date={new Date(last?.date)} // Affichage de la date de la dernière prestation
-            small // Utilisation du style 'small' pour l'affichage compact
-            label="boom" // Étiquette 'boom' associée à la dernière prestation
-          />
+          {last && (
+            <EventCard
+              imageSrc={last?.cover}
+              title={last?.title}
+              date={new Date(last?.date)}
+              small
+              label={last?.type}
+              data-testid="lastEvent"
+            />
+          )}
         </div>
 
         {/* Colonne pour les informations de contact */}
