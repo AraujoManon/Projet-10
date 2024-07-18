@@ -12,12 +12,13 @@ const Slider = () => {
   );
 
   const nextCard = () => {
-    setTimeout(
-      () => setIndex(index + 1 < byDateDesc.length ? index + 1 : 0),
-      5000
-    );
+    if (byDateDesc && byDateDesc.length > 0) {
+      setTimeout(
+        () => setIndex(index + 1 < byDateDesc.length ? index + 1 : 0),
+        5000
+      );
+    }
   };
-
   useEffect(() => {
     nextCard();
   });
