@@ -1,48 +1,41 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-// Ces lignes désactivent certaines règles ESLint liées à l'accessibilité.
-
-import { useState } from "react"; // Importation du hook useState de React
-import PropTypes from "prop-types"; // Importation de PropTypes pour la validation des props
-
-import "./style.scss"; // Importation du fichier de style CSS
+import { useState } from "react";
+import PropTypes from "prop-types";
+import "./style.scss";
 
 const Select = ({
-  selection, // Tableau des options disponibles pour la sélection
-  onChange, // Fonction à appeler lorsque la sélection change
-  name, // Nom de l'input caché
-  titleEmpty, // Booléen indiquant si le titre doit être vide
-  label, // Label du composant
-  type = "normal", // Type de sélecteur, par défaut "normal"
+  selection,
+  onChange,
+  name,
+  titleEmpty,
+  label,
+  type = "normal",
 }) => {
-  const [value, setValue] = useState(); // État pour la valeur sélectionnée
-  const [collapsed, setCollapsed] = useState(true); // État pour déterminer si le menu est replié
+  const [value, setValue] = useState();
+  const [collapsed, setCollapsed] = useState(true);
 
-  // Fonction pour changer la valeur sélectionnée
   const changeValue = (newValue) => {
-    onChange(newValue); // Appelle la fonction onChange passée en prop
-    setValue(newValue); // Met à jour l'état value avec la nouvelle valeur
-    setCollapsed(newValue); // Met à jour l'état collapsed
+    onChange(newValue);
+    setValue(newValue);
+    setCollapsed(newValue);
   };
 
   return (
     <div className={`SelectContainer ${type}`} data-testid="select-testid">
-      {label && <div className="label">{label}</div>}{" "}
-      {/* Affiche le label si présent */}
+      {label && <div className="label">{label}</div>}
+
       <div className="Select">
         <ul>
           <li className={collapsed ? "SelectTitle--show" : "SelectTitle--hide"}>
-            {value || (!titleEmpty && "Toutes")}{" "}
-            {/* Affiche la valeur sélectionnée ou "Toutes" si titleEmpty est faux */}
+            {value || (!titleEmpty && "Toutes")}
           </li>
           {!collapsed && (
             <>
-              {" "}
-              {/* Fragment React pour grouper les éléments */}
               {!titleEmpty && (
                 <li onClick={() => changeValue(null)}>
-                  <input defaultChecked={!value} name="selected" type="radio" />{" "}
-                  Toutes {/* Option pour réinitialiser la sélection */}
+                  <input defaultChecked={!value} name="selected" type="radio" />
+                  Toutes
                 </li>
               )}
               {selection.map((s) => (
@@ -51,32 +44,30 @@ const Select = ({
                     defaultChecked={value === s}
                     name="selected"
                     type="radio"
-                  />{" "}
-                  {s} {/* Affiche chaque option de sélection */}
+                  />
+                  {s}
                 </li>
               ))}
             </>
           )}
         </ul>
         <input type="hidden" value={value || ""} name={name} />{" "}
-        {/* Input caché contenant la valeur sélectionnée */}
         <button
           type="button"
           data-testid="collapse-button-testid"
           className={collapsed ? "open" : "close"}
           onClick={(e) => {
-            e.preventDefault(); // Empêche le comportement par défaut du bouton
-            setCollapsed(!collapsed); // Inverse l'état collapsed pour afficher ou cacher les options
+            e.preventDefault();
+            setCollapsed(!collapsed);
           }}
         >
-          <Arrow /> {/* Affiche le composant Arrow */}
+          <Arrow />
         </button>
       </div>
     </div>
   );
 };
 
-// Composant Arrow qui dessine une flèche SVG
 const Arrow = () => (
   <svg
     width="21"
@@ -92,24 +83,21 @@ const Arrow = () => (
   </svg>
 );
 
-// Définition des types attendus pour les props du composant Select
 Select.propTypes = {
-  selection: PropTypes.arrayOf(PropTypes.string).isRequired, // Tableau de chaînes de caractères (obligatoire)
-  onChange: PropTypes.func, // Fonction appelée lors d'un changement de sélection
-  name: PropTypes.string, // Nom de l'input caché
-  titleEmpty: PropTypes.bool, // Booléen pour définir si le titre est vide ou non
-  label: PropTypes.string, // Libellé du composant
-  type: PropTypes.string, // Type du composant
+  selection: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onChange: PropTypes.func,
+  name: PropTypes.string,
+  titleEmpty: PropTypes.bool,
+  label: PropTypes.string,
+  type: PropTypes.string,
 };
 
-// Valeurs par défaut pour les props du composant Select
 Select.defaultProps = {
-  onChange: () => null, // Fonction par défaut pour onChange
-  titleEmpty: false, // Titre non vide par défaut
-  label: "", // Libellé vide par défaut
-  type: "normal", // Type "normal" par défaut
-  name: "select", // Nom "select" par défaut
+  onChange: () => null,
+  titleEmpty: false,
+  label: "",
+  type: "normal",
+  name: "select",
 };
 
-// Exportation du composant Select pour l'utiliser dans d'autres fichiers
 export default Select;
